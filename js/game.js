@@ -1,7 +1,8 @@
 function createBoard() {
+
     const GAME_FIELDS = 9;
     const MARKERS = ['X','O'];
-    let field = Array(GAME_FIELDS);
+    let field = Array.from({length: GAME_FIELDS}, val => false);
     // winner mark or empty if draw
     let winner = '';
 
@@ -18,7 +19,24 @@ function createBoard() {
     function checkGameOver() {
         let isGameOver = false;
         // board is completely occupied
-        
+
+        // cell unoccupied means cell === false else true
+        isGameOver = field.reduce((acc, val) => acc = acc && val? true : false ,true);
+
+        if(!isGameOver) {
+            const winningCriteria = [
+                field[0] && field[0] === field[1] && field[0] === field[2],
+                field[3] && field[3] === field[4] && field[3] === field[5],
+                field[6] && field[6] === field[7] && field[6] === field[8],
+                field[0] && field[0] === field[3] && field[0] === field[6],
+                field[1] && field[1] === field[4] && field[1] === field[7],
+                field[2] && field[2] === field[5] && field[2] === field[8],
+                field[0] && field[0] === field[4] && field[0] === field[8],
+                field[6] && field[6] === field[4] && field[6] === field[2],
+            ]
+            winningCriteria.forEach(x => isGameOver = isGameOver || x);
+        }
+            
         // winning criteria is met
         return isGameOver;
     }
@@ -36,14 +54,16 @@ function createBoard() {
         return winner;
     }
 
-
+    function resetField() {
+        field.forEach((_, idx) => field[idx] = false);
+    }
 
     return {
-        field,
         addMarker,
         getWinner,
         checkGameOver,
         displayPretty,
+        resetField,
     };
 }
 
@@ -65,3 +85,11 @@ function createPlayer(name, marker) {
         setScore,
     };
 }
+
+let i = true;
+
+function sum(a, b) {
+    return a + b;
+}
+
+export {createBoard, sum, i};
