@@ -1,82 +1,84 @@
-import {createBoard, createPlayer} from './game'
+import {createBoard, createPlayer, createGame} from './game'
 
-const board = createBoard();
 
 
 describe('Check if game is over', () => {
     // Applies only to tests in this describe block
+    let game = createGame('','');
+
     beforeEach(() => {
-        board.resetField()
+        game.getBoard().resetField()
     });
   
     test('Field full', () => {
-      board.addMarker(0, 'X');
-      board.addMarker(1, 'O');
-      board.addMarker(2, 'X');
-      board.addMarker(3, 'X');
-      board.addMarker(4, 'O');
-      board.addMarker(5, 'O');
-      board.addMarker(6, 'O');
-      board.addMarker(7, 'X');
-      board.addMarker(8, 'X');
-      board.addMarker(9, 'X');
+      game.getBoard().addMarker(0, 'X');
+      game.getBoard().addMarker(1, 'O');
+      game.getBoard().addMarker(2, 'X');
+      game.getBoard().addMarker(3, 'X');
+      game.getBoard().addMarker(4, 'O');
+      game.getBoard().addMarker(5, 'O');
+      game.getBoard().addMarker(6, 'O');
+      game.getBoard().addMarker(7, 'X');
+      game.getBoard().addMarker(8, 'X');
+      game.getBoard().addMarker(9, 'X');
 
-      expect(board.checkGameOver()).toBe(true);
-      expect(board.getWinner()).toBe('');
-      expect(board.isFreeSpaceAvailable()).toBe(false);
+      expect(game.checkGameOver()).toBe(true);
+      expect(game.getWinner()).toBe('');
+      expect(game.getBoard().isFreeSpaceAvailable()).toBe(false);
     });
+
     test('1st row', () => {
-      board.addMarker(0, 'X');
-      board.addMarker(1, 'X');
-      board.addMarker(2, 'X');
-      expect(board.checkGameOver()).toBe(true);
-      expect(board.getWinner()).toBe('X');
+      game.getBoard().addMarker(0, 'X');
+      game.getBoard().addMarker(1, 'X');
+      game.getBoard().addMarker(2, 'X');
+      expect(game.checkGameOver()).toBe(true);
+      expect(game.getWinner()).toBe('X');
     });
     test('2nd row', () => {
-      board.addMarker(3, 'O');
-      board.addMarker(4, 'O');
-      board.addMarker(5, 'O');
-      expect(board.checkGameOver()).toBe(true);
-      expect(board.getWinner()).toBe('O');
+      game.getBoard().addMarker(3, 'O');
+      game.getBoard().addMarker(4, 'O');
+      game.getBoard().addMarker(5, 'O');
+      expect(game.checkGameOver()).toBe(true);
+      expect(game.getWinner()).toBe('O');
     });
     test('3rd row', () => {
-      board.addMarker(6, 'X');
-      board.addMarker(7, 'X');
-      board.addMarker(8, 'X');
-      expect(board.checkGameOver()).toBe(true);
-      expect(board.getWinner()).toBe('X');
+      game.getBoard().addMarker(6, 'X');
+      game.getBoard().addMarker(7, 'X');
+      game.getBoard().addMarker(8, 'X');
+      expect(game.checkGameOver()).toBe(true);
+      expect(game.getWinner()).toBe('X');
     });
     test('1st column', () => {
-      board.addMarker(0, 'X');
-      board.addMarker(3, 'X');
-      board.addMarker(6, 'X');
-      expect(board.checkGameOver()).toBe(true);
-      expect(board.getWinner()).toBe('X');
+      game.getBoard().addMarker(0, 'X');
+      game.getBoard().addMarker(3, 'X');
+      game.getBoard().addMarker(6, 'X');
+      expect(game.checkGameOver()).toBe(true);
+      expect(game.getWinner()).toBe('X');
     });
     test('2nd column', () => {
-      board.addMarker(1, 'X');
-      board.addMarker(4, 'X');
-      board.addMarker(7, 'X');
-      expect(board.checkGameOver()).toBe(true);
-      expect(board.getWinner()).toBe('X');
+      game.getBoard().addMarker(1, 'X');
+      game.getBoard().addMarker(4, 'X');
+      game.getBoard().addMarker(7, 'X');
+      expect(game.checkGameOver()).toBe(true);
+      expect(game.getWinner()).toBe('X');
     });
     test('3rd column', () => {
-      board.addMarker(2, 'O');
-      board.addMarker(5, 'O');
-      board.addMarker(8, 'O');
-      expect(board.checkGameOver()).toBe(true);
-      expect(board.getWinner()).toBe('O');
+      game.getBoard().addMarker(2, 'O');
+      game.getBoard().addMarker(5, 'O');
+      game.getBoard().addMarker(8, 'O');
+      expect(game.checkGameOver()).toBe(true);
+      expect(game.getWinner()).toBe('O');
     });
     test('1st row no win', () => {
-      board.addMarker(0, 'X');
-      board.addMarker(1, 'X');
-      board.addMarker(2, 'O');
-      expect(board.checkGameOver()).toBe(false);
-      expect(board.getWinner()).toBe('');
+      game.getBoard().addMarker(0, 'X');
+      game.getBoard().addMarker(1, 'X');
+      game.getBoard().addMarker(2, 'O');
+      expect(game.checkGameOver()).toBe(false);
+      expect(game.getWinner()).toBe('');
     });
     test('empty field', () => {
-      expect(board.checkGameOver()).toBe(false);
-      expect(board.getWinner()).toBe('');
+      expect(game.checkGameOver()).toBe(false);
+      expect(game.getWinner()).toBe('');
     });
 
 });
@@ -85,6 +87,8 @@ describe('Check if game is over', () => {
 
 describe('Check Interaction', () => {
     // Applies only to tests in this describe block
+    const board = createBoard();
+
     beforeEach(() => {
         board.resetField()
     });
@@ -161,13 +165,76 @@ describe('Check Player logic', () => {
 
 describe('Check Game logic', () => {
     // Applies only to tests in this describe block
+    const game =  createGame('MrX', 'MrY');
     beforeEach(() => {
-        board.resetField()
+        game.initGame();
+        game.resetScores();
     });
 
-    test('Get field out of range', () => {
-      expect(board.getField(-1)).toBeUndefined();
-      expect(board.getField(-9)).toBeUndefined();
+    test('Player turns alternate', () => {
+        expect(game.getActivePlayer()).toEqual(game.getPlayer(0));
+        game.playRound(0);
+        expect(game.getActivePlayer()).toEqual(game.getPlayer(1));
+    });
+
+    test('Player winner score increment', () => {
+        game.playRound(0);
+        game.playRound(3);
+        game.playRound(1);
+        game.playRound(4);
+        game.playRound(2);
+
+        expect(game.getScores()).toEqual([1,0]);
+        game.initGame();
+        game.playRound(0);
+        game.playRound(3);
+        game.playRound(1);
+        game.playRound(4);
+        game.playRound(6);
+        game.playRound(5);
+
+        expect(game.getScores()).toEqual([1,1]);
+    });
+    test('Draw', () => {
+        // X O X
+        // X X O
+        // O X O
+        game.playRound(0);
+        game.playRound(1);
+
+        game.playRound(2);
+        game.playRound(8);
+
+        game.playRound(4);
+        game.playRound(5);
+
+        game.playRound(7);
+        game.playRound(6);
+
+        game.playRound(3);
+
+        expect(game.getScores()).toEqual([0,0]);
+ 
+    });
+
+    test('Reset game scores', () => {
+        game.playRound(0);
+        game.playRound(3);
+        game.playRound(1);
+        game.playRound(4);
+        game.playRound(2);
+
+        expect(game.getScores()).toEqual([1,0]);
+        game.resetScores();
+        expect(game.getScores()).toEqual([0,0]);
+        
+    });
+
+    test('Init game', () => {
+        game.playRound(0);
+        game.initGame();
+        expect(game.getActivePlayer()).toEqual(game.getPlayer(0));
+        expect(game.getBoard().getField(0)).toBe(false);
     });
 
 });

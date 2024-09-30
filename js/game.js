@@ -2,20 +2,7 @@ function createBoard() {
 
     const GAME_FIELDS = 9;
     const MARKERS = ['X','O'];
-    const BOARD_ZONES = {
-        row_0: [0, 1, 2],
-        row_1: [3, 4, 5],
-        row_2: [6, 7, 8],
-        col_0: [0, 3, 6],
-        col_1: [1, 4, 7],
-        col_2: [2, 5, 8],
-        diag_0:[0, 4, 8],
-        diag_1:[2, 4, 6],
-    }
-
     let field = Array.from({length: GAME_FIELDS}, val => false);
-    // winner mark or empty if draw
-    let winner = '';
 
     function addMarker(cell, marker) {
         let success = false;
@@ -31,26 +18,6 @@ function createBoard() {
         // cell unoccupied means cell === false else true
         // callback: Boolean constructor will return true or false
         return !field.every(Boolean);
-    }
-
-    function getWinner() {
-        let winningMark = '';
-        // loop over board zones and check winning criteria
-        for (const [_, fields] of Object.entries(BOARD_ZONES)) {
-            // field not empty to avoid comparing empty fields
-            if(field[fields[0]]) {
-                if(field[fields[0]]===field[fields[1]] && field[fields[0]] === field[fields[2]]) {
-                    winningMark = field[fields[0]];
-                    break;
-                }                    
-            }
-        }
-        return winningMark;
-    }
-
-    function checkGameOver() {
-        // game over when either there is a winner or no space left
-        return Boolean(getWinner()) || !isFreeSpaceAvailable();     
     }
 
     function getBoardPretty() {
@@ -75,12 +42,11 @@ function createBoard() {
 
     return {
         addMarker,
-        getWinner,
-        checkGameOver,
         displayPretty,
         resetField,
         isFreeSpaceAvailable,
         getField,
+        getBoardPretty,
     };
 }
 
@@ -116,58 +82,96 @@ function createGame(player_name1, player_name2) {
     const players = [createPlayer(player_name1, true), createPlayer(player_name2, false)];
     let playerTurn = 0;
 
-    function playGame() {
-        resetGame();
+    function playRound(choice) {
+        if(!checkGameOver()) {
+            board.addMarker(choice, players[playerTurn].getMarker());
+            if(checkGameOver()) {
+                let winner = getWinner();
+                updateWinner(winner);
+            }
+            else {
+                playerTurn = (playerTurn + 1) % players.length;
+            }
+        }
 
-        do {
-            playRound();
-            playerTurn = (playerTurn + 1) % players.length;
-        } while(!board.checkGameOver())
+        function updateWinner(winnerMark) {
+            if(winnerMark) {
+                // update score
+                players.forEach(x => {
+                    if(x.getMarker() === winnerMark) {
+                        x.setScore(x.getScore() + 1);
+                    }
+                });
+            }
+        }
+    }
+
+    function getScores() {
+        return players.map(x => x.getScore());
+    }
+
+    function resetScores() {
+        players.forEach(x => x.setScore(0));
+    }
+
+    function getActivePlayer() {
+        return players[playerTurn];
+    }
     
-        let winner = board.getWinner();
-        if(winner) {
-            // update score
-            players.forEach(x => {
-                if(x.getMarker() === winner) {
-                    x.setScore(x.getScore() + 1);
-                }
-            });
-        }
-        else {
-            // no winner
-        }
+    function getPlayer(num) {
+        return players[num];
     }
 
-    function playRound() {
-        // check if available fields
-        board.addMarker(getPlayerInput(players[playerTurn]), players[playerTurn].getMarker());
-
-        function getPlayerInput(player) {
-            let choice = 0;
-            board.displayPretty();
-            do {
-                // choice = Math.floor(Math.random() * 9);
-                choice = +prompt(`${player.getName()}: Which field?`);
-            } while(board.getField(choice))
-            return choice;
-        }
-
-    }
-
-    function resetGame() {
+    function initGame() {
         board.resetField();
         playerTurn = 0;
     }
+ 
+    function getBoard() {
+        return board;
+    }
 
+    function getWinner() {
+        const BOARD_ZONES = {
+            row_0: [0, 1, 2],
+            row_1: [3, 4, 5],
+            row_2: [6, 7, 8],
+            col_0: [0, 3, 6],
+            col_1: [1, 4, 7],
+            col_2: [2, 5, 8],
+            diag_0:[0, 4, 8],
+            diag_1:[2, 4, 6],
+        }
+        let winningMark = '';
+        
+        // loop over board zones and check winning criteria
+        for (const [_, fields] of Object.entries(BOARD_ZONES)) {
+            // field not empty to avoid comparing empty fields
+            if(board.getField([fields[0]])) {
+                if(board.getField([fields[0]])===board.getField([fields[1]]) && board.getField([fields[0]]) === board.getField([fields[2]])) {
+                    winningMark = board.getField([fields[0]]);
+                    break;
+                }                    
+            }
+        }
+        return winningMark;
+    }
 
-
+    function checkGameOver() {
+        return Boolean(getWinner()) || !board.isFreeSpaceAvailable();     
+    }
 
 
     return {
-        playGame,
+        initGame,
         playRound,
-        board,
-        players,
+        getScores,
+        resetScores,
+        getActivePlayer,
+        getPlayer,
+        getBoard,
+        checkGameOver,
+        getWinner,
     };
 }
 
