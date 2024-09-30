@@ -1,3 +1,9 @@
+let name1 = '';
+let name2 = '';
+
+let game = null;
+let controller = null;
+
 function createGame(player_name1, player_name2) {
     const board = createBoard();
     const players = [createPlayer(player_name1, true), createPlayer(player_name2, false)];
@@ -176,61 +182,125 @@ function createGame(player_name1, player_name2) {
     };
 }
 
+function createViewController(game) {
+
+    const gameState = game;
+
+    function enableFields() {
+        const boardFields = document.querySelectorAll('div.game-board-cell');
+        boardFields.forEach(x => x.classList.remove('disabled'));
+    }
+    function disableFields() {
+        const boardFields = document.querySelectorAll('div.game-board-cell');
+        boardFields.forEach(x => x.classList.add('disabled'));
+    }
+    
+    function drawBoard() {
+        const board = gameState.getBoard();
+        const boardFields = document.querySelectorAll('div.game-board-cell');
+        boardFields.forEach((element, idx) => {
+            if(board.getField(idx)) {
+                element.firstChild.textContent = board.getField(idx);
+                element.classList.add('disabled');
+            }
+            else {
+                element.firstChild.textContent = '';
+            }
+        });
+    }
+
+    function updateScoreBoard() {
+        const scoreBoard = Array.from(document.querySelector('div.score-board').children);
+        scoreBoard.forEach((element, idx) => {
+            element.children[0].textContent = gameState.getPlayer(idx).getName()
+            element.children[1].textContent = gameState.getPlayer(idx).getScore()
+        })
+    }
+    
+    return {
+        enableFields,
+        disableFields,
+        drawBoard,
+        updateScoreBoard,
+    }
+};
 
 
-// const name1 = 'Guy';
-// const name2 = 'Kaka';
-// const game = createGame(name1, name2);
+const gameBoardDOM = document.querySelector('div.game-board');
+const gameStartBtn = document.querySelector('#start-game');
+const resetScoreBtn = document.querySelector('#reset-score');
+const modalBtnNext = document.querySelector('#modal-next');
+const modalBtnSubmit = document.querySelector('#modal-submit');
 
-// const gameBoardDOM = document.querySelector('div.game-board');
-// const gameStartBtn = document.querySelector('#start-game');
 
-// gameBoardDOM.addEventListener('click', e => {
+modalBtnNext.addEventListener('click', (e) => {
+    e.preventDefault();
+    const inputText1 = document.querySelector('form > div:first-child');
+    const inputText2 = document.querySelector('form > div:last-child');
+    inputText1.setAttribute('style', 'display : none');
+    inputText2.setAttribute('style', 'display : block');
+})
 
-//     let element = null;
-//     // if clicked on span , div
-//     if(e.target.classList.contains('cell-value')) {
-//         element = e.target.parentNode;
-//     } else if (e.target.classList.contains('game-board-cell')) {
-//         element = e.target;
-//     }
+modalBtnSubmit.addEventListener('click', (e) => {
+    e.preventDefault();
+    name1 = document.querySelector('input#player-name1').value;
+    name2 = document.querySelector('input#player-name2').value;
+    const modal = document.querySelector('div.player-input-modal');
+    modal.setAttribute('style', 'display : none');
+    game = createGame(name1, name2);
+    controller = createViewController(game);
+    controller.updateScoreBoard();
+})
 
-//     if(element && !element.classList.contains('disabled')) {
 
-//         console.log(element.getAttribute('data-cell'), game.getActivePlayer().getMarker());
-//         element.firstElementChild.textContent = game.getActivePlayer().getMarker();
-//         game.playRound(+element.getAttribute('data-cell'));
-//         element.classList.add('disabled');
+resetScoreBtn.addEventListener('click', () => {
+    game.resetScores();
+    controller.updateScoreBoard();
+})
 
-//         if(game.checkGameOver()) {
-//             disableFields();
-//             gameStartBtn.disabled = false;
-//             if(game.getWinner().winner) {
-//                 console.log(game.getWinner().winner);
-//             }
-//         } 
-        
-//     }
-// })
+gameBoardDOM.addEventListener('click', e => {
 
-// gameStartBtn.addEventListener('click', (e) => {
-//     gameStartBtn.disabled = true;
-//     game.initGame();
-//     enableFields();
+    let element = null;
+    // if clicked on span , div
+    if(e.target.classList.contains('cell-value')) {
+        element = e.target.parentNode;
+    } else if (e.target.classList.contains('game-board-cell')) {
+        element = e.target;
+    }
 
-// })
+    if(element && !element.classList.contains('disabled')) {
 
-// function enableFields() {
-//     const boardFields = document.querySelectorAll('div.game-board-cell');
-//     boardFields.forEach(x => x.classList.remove('disabled'));
-// }
-// function disableFields() {
-//     const boardFields = document.querySelectorAll('div.game-board-cell');
-//     boardFields.forEach(x => x.classList.add('disabled'));
-// }
+        game.playRound(+element.getAttribute('data-cell'));
+        controller.drawBoard();
 
-// disableFields();
-export {createGame};
+        if(game.checkGameOver()) {
+            gameStartBtn.disabled = false;
+            controller.disableFields();
+            if(game.getWinner().winner) {
+                controller.updateScoreBoard()
+            }
+        }
+    }
+});
+
+
+
+gameStartBtn.addEventListener('click', (e) => {
+    gameStartBtn.disabled = true;
+    game.initGame();
+    controller.enableFields();
+    controller.updateScoreBoard();
+    controller.drawBoard(game.getBoard());
+});
+
+controller.disableFields();
+
+
+
+
+
+
+// export {createGame};
 
 // game finished:
     // score management

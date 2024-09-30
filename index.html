@@ -12,30 +12,39 @@
 
     <div class="player-input-modal">
         <form action="">
-            <label for="player-name">Please enter the name for Player 1</label>
-            <input type="text" id="player-name1" minlength="1" required>
-            <label for="player-name">Please enter the name for Player 2</label>
-            <input type="text" id="player-name2" minlength="1" required>
-            <button>Start Game</button>
+            <div>
+                <p>
+                    <label for="player-name">Please enter the name for Player 1</label>
+                    <input type="text" id="player-name1" minlength="1" required>
+                </p>
+                <button type="submit" id="modal-next">Next</button>
+            </div>
+            <div>
+                <p>
+                    <label for="player-name">Please enter the name for Player 2</label>
+                    <input type="text" id="player-name2" minlength="1" required>
+                </p>
+                <button type="submit" id="modal-submit">Start Game</button>
+            </div>
         </form>
     </div>
 
     <div class="game-container">
         <div class="interactions">
             <button id="start-game">Start game</button>
-            <button>Reset Scores    </button>
+            <button id="reset-score">Reset Scores</button>
         </div>
         
         <div class="game-board">
-            <div class="game-board-cell" data-cell="0"><span class="cell-value">X</span></div>
-            <div class="game-board-cell" data-cell="1"><span class="cell-value">X</span></div>
-            <div class="game-board-cell" data-cell="2"><span class="cell-value">X</span></div>
-            <div class="game-board-cell" data-cell="3"><span class="cell-value">X</span></div>
-            <div class="game-board-cell" data-cell="4"><span class="cell-value">X</span></div>
-            <div class="game-board-cell" data-cell="5"><span class="cell-value">X</span></div>
-            <div class="game-board-cell" data-cell="6"><span class="cell-value">X</span></div>
-            <div class="game-board-cell" data-cell="7"><span class="cell-value">X</span></div>
-            <div class="game-board-cell" data-cell="8"><span class="cell-value">X</span></div>
+            <div class="game-board-cell" data-cell="0"><span class="cell-value"></span></div>
+            <div class="game-board-cell" data-cell="1"><span class="cell-value"></span></div>
+            <div class="game-board-cell" data-cell="2"><span class="cell-value"></span></div>
+            <div class="game-board-cell" data-cell="3"><span class="cell-value"></span></div>
+            <div class="game-board-cell" data-cell="4"><span class="cell-value"></span></div>
+            <div class="game-board-cell" data-cell="5"><span class="cell-value"></span></div>
+            <div class="game-board-cell" data-cell="6"><span class="cell-value"></span></div>
+            <div class="game-board-cell" data-cell="7"><span class="cell-value"></span></div>
+            <div class="game-board-cell" data-cell="8"><span class="cell-value"></span></div>
         </div>
         
         <div class="score-board">
