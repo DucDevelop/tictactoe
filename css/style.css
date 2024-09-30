@@ -1,0 +1,41 @@
+div.game-board {
+    display: grid;
+    grid-template-columns: repeat(3, 200px);
+    grid-template-rows: repeat(3, 200px);
+    align-items: center;
+    justify-items: center;
+    justify-content: center;
+}
+
+div.game-board-cell {
+    width: 100%;
+    height: 100%;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    border-left: 1px solid black;
+}
+
+div.game-board-cell.disabled {
+    background-color: rgb(150, 150, 150);
+}
+
+div.game-board-cell:not(.disabled):hover {
+    filter: opacity(0.4);
+}
+
+
+
+
+div.game-board-cell > span {
+    flex: 1;
+}
+
+
+/* first 6 cells */
+div.game-board-cell:nth-child(-n + 6) {
+    border-bottom: 1px solid black;
+}
+div.game-board-cell:nth-child(3n+1) {
+    border-left: none;
+}

@@ -7,7 +7,7 @@ function createGame(player_name1, player_name2) {
         if(!checkGameOver()) {
             board.addMarker(choice, players[playerTurn].getMarker());
             if(checkGameOver()) {
-                let winner = getWinner();
+                let winner = getWinner().winner;
                 updateWinner(winner);
             }
             else {
@@ -15,14 +15,10 @@ function createGame(player_name1, player_name2) {
             }
         }
 
-        function updateWinner(winnerMark) {
-            if(winnerMark) {
+        function updateWinner(winner) {
+            if(winner) {
                 // update score
-                players.forEach(x => {
-                    if(x.getMarker() === winnerMark) {
-                        x.setScore(x.getScore() + 1);
-                    }
-                });
+                winner.setScore(winner.getScore() + 1);
             }
         }
     }
@@ -71,15 +67,16 @@ function createGame(player_name1, player_name2) {
             if(board.getField([fields[0]])) {
                 if(board.getField([fields[0]])===board.getField([fields[1]]) && board.getField([fields[0]]) === board.getField([fields[2]])) {
                     winningMark = board.getField([fields[0]]);
-                    break;
+                    return players[0].getMarker() === winningMark ? {winner : players[0], cells: fields} : {winner : players[1], cells: fields};
                 }                    
             }
         }
-        return winningMark;
+        return {};
     }
 
     function checkGameOver() {
-        return Boolean(getWinner()) || !board.isFreeSpaceAvailable();     
+
+        return (Object.keys(getWinner()).length !== 0 || !board.isFreeSpaceAvailable());     
     }
 
     function createBoard() {
@@ -165,7 +162,7 @@ function createGame(player_name1, player_name2) {
 
     }  
 
-    
+
     return {
         initGame,
         playRound,
@@ -181,5 +178,67 @@ function createGame(player_name1, player_name2) {
 
 
 
+// const name1 = 'Guy';
+// const name2 = 'Kaka';
+// const game = createGame(name1, name2);
 
+// const gameBoardDOM = document.querySelector('div.game-board');
+// const gameStartBtn = document.querySelector('#start-game');
+
+// gameBoardDOM.addEventListener('click', e => {
+
+//     let element = null;
+//     // if clicked on span , div
+//     if(e.target.classList.contains('cell-value')) {
+//         element = e.target.parentNode;
+//     } else if (e.target.classList.contains('game-board-cell')) {
+//         element = e.target;
+//     }
+
+//     if(element && !element.classList.contains('disabled')) {
+
+//         console.log(element.getAttribute('data-cell'), game.getActivePlayer().getMarker());
+//         element.firstElementChild.textContent = game.getActivePlayer().getMarker();
+//         game.playRound(+element.getAttribute('data-cell'));
+//         element.classList.add('disabled');
+
+//         if(game.checkGameOver()) {
+//             disableFields();
+//             gameStartBtn.disabled = false;
+//             if(game.getWinner().winner) {
+//                 console.log(game.getWinner().winner);
+//             }
+//         } 
+        
+//     }
+// })
+
+// gameStartBtn.addEventListener('click', (e) => {
+//     gameStartBtn.disabled = true;
+//     game.initGame();
+//     enableFields();
+
+// })
+
+// function enableFields() {
+//     const boardFields = document.querySelectorAll('div.game-board-cell');
+//     boardFields.forEach(x => x.classList.remove('disabled'));
+// }
+// function disableFields() {
+//     const boardFields = document.querySelectorAll('div.game-board-cell');
+//     boardFields.forEach(x => x.classList.add('disabled'));
+// }
+
+// disableFields();
 export {createGame};
+
+// game finished:
+    // score management
+    // disable fields
+    // winner message
+    // line marking winnner if not draw
+    // activate button to start new game
+
+// game start:
+    // disable start button
+    // init game

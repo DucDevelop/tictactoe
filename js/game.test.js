@@ -23,7 +23,7 @@ describe('Check if game is over', () => {
       game.getBoard().addMarker(9, 'X');
 
       expect(game.checkGameOver()).toBe(true);
-      expect(game.getWinner()).toBe('');
+      expect(game.getWinner()).toEqual({});
       expect(game.getBoard().isFreeSpaceAvailable()).toBe(false);
     });
 
@@ -32,53 +32,59 @@ describe('Check if game is over', () => {
       game.getBoard().addMarker(1, 'X');
       game.getBoard().addMarker(2, 'X');
       expect(game.checkGameOver()).toBe(true);
-      expect(game.getWinner()).toBe('X');
+      expect(game.getWinner().winner.getMarker()).toBe('X');
+      expect(game.getWinner().cells.sort()).toEqual([0,1,2].sort());
     });
     test('2nd row', () => {
       game.getBoard().addMarker(3, 'O');
       game.getBoard().addMarker(4, 'O');
       game.getBoard().addMarker(5, 'O');
       expect(game.checkGameOver()).toBe(true);
-      expect(game.getWinner()).toBe('O');
+      expect(game.getWinner().winner.getMarker()).toBe('O');
+      expect(game.getWinner().cells.sort()).toEqual([4,5,3].sort());
     });
     test('3rd row', () => {
       game.getBoard().addMarker(6, 'X');
       game.getBoard().addMarker(7, 'X');
       game.getBoard().addMarker(8, 'X');
       expect(game.checkGameOver()).toBe(true);
-      expect(game.getWinner()).toBe('X');
+      expect(game.getWinner().winner.getMarker()).toBe('X');
+      expect(game.getWinner().cells.sort()).toEqual([8,7,6].sort());
     });
     test('1st column', () => {
       game.getBoard().addMarker(0, 'X');
       game.getBoard().addMarker(3, 'X');
       game.getBoard().addMarker(6, 'X');
       expect(game.checkGameOver()).toBe(true);
-      expect(game.getWinner()).toBe('X');
+      expect(game.getWinner().winner.getMarker()).toBe('X');
+      expect(game.getWinner().cells.sort()).toEqual([0,3,6].sort());
     });
     test('2nd column', () => {
       game.getBoard().addMarker(1, 'X');
       game.getBoard().addMarker(4, 'X');
       game.getBoard().addMarker(7, 'X');
       expect(game.checkGameOver()).toBe(true);
-      expect(game.getWinner()).toBe('X');
+      expect(game.getWinner().winner.getMarker()).toBe('X');
+      expect(game.getWinner().cells.sort()).toEqual([4,1,7].sort());
     });
     test('3rd column', () => {
       game.getBoard().addMarker(2, 'O');
       game.getBoard().addMarker(5, 'O');
       game.getBoard().addMarker(8, 'O');
       expect(game.checkGameOver()).toBe(true);
-      expect(game.getWinner()).toBe('O');
+      expect(game.getWinner().winner.getMarker()).toBe('O');
+      expect(game.getWinner().cells.sort()).toEqual([8,5,2].sort());
     });
     test('1st row no win', () => {
       game.getBoard().addMarker(0, 'X');
       game.getBoard().addMarker(1, 'X');
       game.getBoard().addMarker(2, 'O');
       expect(game.checkGameOver()).toBe(false);
-      expect(game.getWinner()).toBe('');
+      expect(game.getWinner()).toEqual({});
     });
     test('empty field', () => {
-      expect(game.checkGameOver()).toBe(false);
-      expect(game.getWinner()).toBe('');
+        expect(game.checkGameOver()).toBe(false);
+        expect(game.getWinner()).toEqual({});
     });
 
 });
