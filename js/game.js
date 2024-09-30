@@ -1,82 +1,3 @@
-function createBoard() {
-
-    const GAME_FIELDS = 9;
-    const MARKERS = ['X','O'];
-    let field = Array.from({length: GAME_FIELDS}, val => false);
-
-    function addMarker(cell, marker) {
-        let success = false;
-
-        if(!field[cell] && marker && MARKERS.includes(marker.toUpperCase())) {
-            field[cell] = marker.toUpperCase();
-            success = true;
-        }
-        return success;
-    }
-
-    function isFreeSpaceAvailable() {
-        // cell unoccupied means cell === false else true
-        // callback: Boolean constructor will return true or false
-        return !field.every(Boolean);
-    }
-
-    function getBoardPretty() {
-        let prettyField = [...field].map(val => val? val : '_'); // iterator workaround for accessing empty array elements
-        return prettyField.reduce((acc, val, idx) => acc + (idx % 3 === 0 ? `\n${val} ` : `${val} `), '')
-    }
-
-    function displayPretty() {
-        console.log(getBoardPretty());
-    }
-
-
-    function resetField() {
-        field.forEach((_, idx) => field[idx] = false);
-    }
-
-    function getField(num) {
-        if(num >= 0 && num < GAME_FIELDS) {
-            return field[num]
-        }
-    }
-
-    return {
-        addMarker,
-        displayPretty,
-        resetField,
-        isFreeSpaceAvailable,
-        getField,
-        getBoardPretty,
-    };
-}
-
-
-function createPlayer(name, markerX=true) {
-
-    let score = 0;
-    const marker = markerX? 'X' : 'O';
-
-    function getScore() {
-        return score;
-    }
-    function setScore(val) {
-        score = val;
-    }
-    function getMarker() {
-        return marker;
-    }
-    function getName() {
-        return name;
-    }
-
-    return {
-        getScore,
-        setScore,
-        getMarker,
-        getName,
-    };
-}
-
 function createGame(player_name1, player_name2) {
     const board = createBoard();
     const players = [createPlayer(player_name1, true), createPlayer(player_name2, false)];
@@ -161,7 +82,90 @@ function createGame(player_name1, player_name2) {
         return Boolean(getWinner()) || !board.isFreeSpaceAvailable();     
     }
 
+    function createBoard() {
 
+        const GAME_FIELDS = 9;
+        const MARKERS = ['X','O'];
+        let field = Array.from({length: GAME_FIELDS}, val => false);
+    
+        function addMarker(cell, marker) {
+            let success = false;
+    
+            if(!field[cell] && marker && MARKERS.includes(marker.toUpperCase())) {
+                field[cell] = marker.toUpperCase();
+                success = true;
+            }
+            return success;
+        }
+    
+        function isFreeSpaceAvailable() {
+            // cell unoccupied means cell === false else true
+            // callback: Boolean constructor will return true or false
+            return !field.every(Boolean);
+        }
+    
+        function getBoardPretty() {
+            let prettyField = [...field].map(val => val? val : '_'); // iterator workaround for accessing empty array elements
+            return prettyField.reduce((acc, val, idx) => acc + (idx % 3 === 0 ? `\n${val} ` : `${val} `), '')
+        }
+    
+        function displayPretty() {
+            console.log(getBoardPretty());
+        }
+    
+    
+        function resetField() {
+            field.forEach((_, idx) => field[idx] = false);
+        }
+    
+        function getField(num) {
+            if(num >= 0 && num < GAME_FIELDS) {
+                return field[num]
+            }
+        }
+    
+        return {
+            addMarker,
+            displayPretty,
+            resetField,
+            isFreeSpaceAvailable,
+            getField,
+            getBoardPretty,
+        };
+    }
+    
+    
+    function createPlayer(name, markerX=true) {
+    
+        let score = 0;
+        const marker = markerX? 'X' : 'O';
+    
+        function getScore() {
+            return score;
+        }
+        function setScore(val) {
+            score = val;
+        }
+        function getMarker() {
+            return marker;
+        }
+        function getName() {
+            return name;
+        }
+    
+        return {
+            getScore,
+            setScore,
+            getMarker,
+            getName,
+        };
+    }
+
+    function drawBoard() {
+
+    }  
+
+    
     return {
         initGame,
         playRound,
@@ -177,4 +181,5 @@ function createGame(player_name1, player_name2) {
 
 
 
-export {createBoard, createPlayer, createGame};
+
+export {createGame};

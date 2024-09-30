@@ -1,4 +1,4 @@
-import {createBoard, createPlayer, createGame} from './game'
+import {createGame} from './game'
 
 
 
@@ -87,7 +87,8 @@ describe('Check if game is over', () => {
 
 describe('Check Interaction', () => {
     // Applies only to tests in this describe block
-    const board = createBoard();
+    const game = createGame('', '')
+    const board = game.getBoard();
 
     beforeEach(() => {
         board.resetField()
@@ -130,30 +131,30 @@ describe('Check Interaction', () => {
 
 
 describe('Check Player logic', () => {
+    
 
     test('Get functions', () => {
-        const name = 'P1';
-        const marker = false
-        const player1 = createPlayer(name, marker);
-        expect(player1.getName()).toBe(name);
-        expect(player1.getMarker()).toBe('O');
-        expect(player1.getScore()).toBe(0);
-    });
-    test('Default marker', () => {
-        const name = 'P1';
-        const player1 = createPlayer(name);
+        const name1 = 'P1';
+        const name2 = 'P2';
+
+        const game = createGame(name1, name2);
+
+        const player1 = game.getPlayer(0);
+        const player2 = game.getPlayer(1);
+        expect(player1.getName()).toBe(name1);
         expect(player1.getMarker()).toBe('X');
-    });
-    test('O marker marker', () => {
-        const name = 'P1';
-        const markerX = false
-        const player1 = createPlayer(name, markerX);
-        expect(player1.getMarker()).toBe('O');
+        expect(player1.getScore()).toBe(0);
+        expect(player2.getName()).toBe(name2);
+        expect(player2.getMarker()).toBe('O');
+        expect(player2.getScore()).toBe(0);
     });
 
+
     test('Set functions', () => {
-        const name = 'P1';
-        const player1 = createPlayer(name);
+        const name1 = 'P1';
+        const name2 = 'P2';
+        const game = createGame(name1, name2);
+        const player1 = game.getPlayer(0);
         player1.setScore(3);
         expect(player1.getScore()).toBe(3);
         player1.setScore(player1.getScore()+1);
