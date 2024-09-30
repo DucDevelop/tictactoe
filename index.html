@@ -4,9 +4,52 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="js/game.js" defer></script>
-    <title>TicTacToe</title>
+    <title>Tic-Tac-Toe</title>
 </head>
 <body>
-    
+    <h1>Play Tic Tac Toe</h1>
+
+    <div class="player-input-modal">
+        <form action="">
+            <label for="player-name">Please enter the name for Player 1</label>
+            <input type="text" id="player-name1" minlength="1" required>
+            <label for="player-name">Please enter the name for Player 2</label>
+            <input type="text" id="player-name2" minlength="1" required>
+            <button>Start Game</button>
+        </form>
+    </div>
+
+    <div class="game-container">
+        <div class="interactions">
+            <button>Start game</button>
+            <button>Reset Scores</button>
+        </div>
+        
+        <div class="game-board">
+            <div class="game-board-cell" data-cell="0">X</div>
+            <div class="game-board-cell" data-cell="1">O</div>
+            <div class="game-board-cell" data-cell="2">X</div>
+            
+            <div class="game-board-cell" data-cell="3">O</div>
+            <div class="game-board-cell" data-cell="4">X</div>
+            <div class="game-board-cell" data-cell="5">X</div>
+            
+            <div class="game-board-cell" data-cell="6">X</div>
+            <div class="game-board-cell" data-cell="7">X</div>
+            <div class="game-board-cell" data-cell="8">X</div>
+        </div>
+        
+        <div class="score-board">
+            <div class="score-player1">
+                <p>Name</p>
+                <p>0</p>
+            </div>
+            <div class="score-player2">
+                <p>Name</p>
+                <p>0</p>
+            </div>
+        </div>
+    </div>
+        
 </body>
 </html>
