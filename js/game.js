@@ -164,10 +164,6 @@ function createGame(player_name1, player_name2) {
         };
     }
 
-    function drawBoard() {
-
-    }  
-
 
     return {
         initGame,
@@ -206,7 +202,43 @@ function createViewController(game) {
             else {
                 element.firstChild.textContent = '';
             }
-        });
+        })
+        drawWinningLine(gameState.getWinner().cells);
+
+
+    }
+
+    function drawWinningLine(cells) {
+        let addClass = '';
+        const containerSelector = 'div.cross-line';
+
+        if(cells) {
+            const linePositions = {
+                'row-0' : [0,1],
+                'row-1' : [3,4],
+                'row-2' : [6,7],
+                'col-0' : [0,3],
+                'col-1' : [1,4],
+                'col-2' : [2,5],
+                'diag-0' : [0,4],
+                'diag-1' : [2,4],
+            }
+    
+            for (const [key, fields] of Object.entries(linePositions)) {
+                if(fields.every(number => cells.includes(number))) {
+                    addClass = `cross-${key}`;
+                    break
+                }
+            }
+            document.querySelector(containerSelector).classList.add(addClass);
+        }
+        else {
+            const matchClass = new RegExp(/(row|col|diag)-[0-2]/, 'g');
+            const classList = Array.from(document.querySelector(containerSelector).classList);
+            const crossClasses = classList.filter((token) => token.match(matchClass));
+            crossClasses.forEach(cssClass => document.querySelector(containerSelector).classList.remove(cssClass));
+        }
+
     }
 
     function updateScoreBoard() {
@@ -249,6 +281,7 @@ modalBtnSubmit.addEventListener('click', (e) => {
     modal.setAttribute('style', 'display : none');
     game = createGame(name1, name2);
     controller = createViewController(game);
+    controller.disableFields();
     controller.updateScoreBoard();
 })
 
@@ -292,8 +325,6 @@ gameStartBtn.addEventListener('click', (e) => {
     controller.updateScoreBoard();
     controller.drawBoard(game.getBoard());
 });
-
-controller.disableFields();
 
 
 
